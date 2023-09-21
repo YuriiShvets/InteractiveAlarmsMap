@@ -1,12 +1,12 @@
-#ifndef ModeSetting_h
-#define ModeSetting_h
+#ifndef UnsignedInt8Setting_h
+#define UnsignedInt8Setting_h
 #pragma once
 
 #include <EEPROM.h>
 
 //	EEPROM must be initialized externaly.
 
-class ModeSetting
+class UnsignedInt8Setting
 {
     private:
         
@@ -15,7 +15,7 @@ class ModeSetting
 
     public:
 
-        ModeSetting()
+        UnsignedInt8Setting()
         {
             addressIndex = 0;
             updateValueFromMemory();

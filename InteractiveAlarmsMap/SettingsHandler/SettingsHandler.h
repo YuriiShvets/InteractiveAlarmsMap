@@ -2,7 +2,7 @@
 #define SettingsHandler_h
 #pragma once
 
-#include "ModeSetting.h"
+#include "UnsignedInt8Setting.h"
 #include <EEPROM.h>
 
 //	Serial must be initialized externaly.
@@ -11,7 +11,7 @@ class SettingsHandler
 {
 
     private:
-        ModeSetting* modeSetting = NULL;
+        UnsignedInt8Setting* modeSetting = NULL;
 
     public:
 
@@ -21,7 +21,7 @@ class SettingsHandler
 
             EEPROM.begin(numberOfUsedBytes);
 
-            modeSetting = new ModeSetting();
+            modeSetting = new UnsignedInt8Setting();
         }
 
         void setMode(uint8_t newMode)
