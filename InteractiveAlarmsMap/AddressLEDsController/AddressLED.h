@@ -10,7 +10,7 @@ class AddressLED
 
 		uint8_t redColorValue = 0;
 		uint8_t greenColorValue = 0;
-		uint8_t bluColorValue = 0;
+		uint8_t blueColorValue = 0;
 
 	public:
 
@@ -36,14 +36,14 @@ class AddressLED
 		}
 
 
-		void setBluColorValue(uint8_t newBluColorValue)
+		void setBlueColorValue(uint8_t newBlueColorValue)
 		{
-			bluColorValue = newBluColorValue;
+			blueColorValue = newBlueColorValue;
 		}
 
-		uint8_t getBluColorValue()
+		uint8_t getBlueColorValue()
 		{
-			return bluColorValue;
+			return blueColorValue;
 		}
 };
 

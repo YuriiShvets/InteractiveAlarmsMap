@@ -35,7 +35,7 @@ class AddressLEDsController
 		{
 			for (uint16_t i = 0; i < numberOfLEDs; i++)
 			{
-				LEDsControl->setPixelColor(i, addressLEDs[i]->getRedColorValue(), addressLEDs[i]->getGreenColorValue(), addressLEDs[i]->getBluColorValue());
+				LEDsControl->setPixelColor(i, addressLEDs[i]->getRedColorValue(), addressLEDs[i]->getGreenColorValue(), addressLEDs[i]->getBlueColorValue());
 			}
 
 			LEDsControl->show();
@@ -52,11 +52,11 @@ class AddressLEDsController
 			{
 				uint8_t currentRedColorValue = LEDsControl->getPixelColor(i) >> 16;
 				uint8_t currentGreenColorValue = (LEDsControl->getPixelColor(i) << 16) >> 24;
-				uint8_t currentBluColorValue = (LEDsControl->getPixelColor(i) << 24) >> 24;
+				uint8_t currentBlueColorValue = (LEDsControl->getPixelColor(i) << 24) >> 24;
 
 				uint8_t newRedColorValue = currentRedColorValue;
 				uint8_t newGreenColorValue = currentGreenColorValue;
-				uint8_t newBluColorValue = currentBluColorValue;
+				uint8_t newBlueColorValue = currentBlueColorValue;
 				
 				if (currentRedColorValue < addressLEDs[i]->getRedColorValue())
 				{
@@ -80,18 +80,18 @@ class AddressLEDsController
 					colorsAreUpToDate = false;
 				}
 
-				if (currentBluColorValue < addressLEDs[i]->getBluColorValue())
+				if (currentBlueColorValue < addressLEDs[i]->getBlueColorValue())
 				{
-					newBluColorValue++;
+					newBlueColorValue++;
 					colorsAreUpToDate = false;
 				}
-				else if (currentBluColorValue > addressLEDs[i]->getBluColorValue())
+				else if (currentBlueColorValue > addressLEDs[i]->getBlueColorValue())
 				{
-					newBluColorValue--;
+					newBlueColorValue--;
 					colorsAreUpToDate = false;
 				}
 
-				LEDsControl->setPixelColor(i, newRedColorValue, newGreenColorValue, newBluColorValue);
+				LEDsControl->setPixelColor(i, newRedColorValue, newGreenColorValue, newBlueColorValue);
 			}
 
 			LEDsControl->show();
@@ -115,9 +115,9 @@ class AddressLEDsController
 			{
 				uint8_t currentRedColorValue = LEDsControl->getPixelColor(i) >> 16;
 				uint8_t currentGreenColorValue = (LEDsControl->getPixelColor(i) << 16) >> 24;
-				uint8_t currentBluColorValue = (LEDsControl->getPixelColor(i) << 24) >> 24;
+				uint8_t currentBlueColorValue = (LEDsControl->getPixelColor(i) << 24) >> 24;
 
-				colorsAreUpToDate &= ((currentRedColorValue == addressLEDs[i]->getRedColorValue()) && (currentGreenColorValue == addressLEDs[i]->getGreenColorValue()) && (currentBluColorValue == addressLEDs[i]->getBluColorValue()));
+				colorsAreUpToDate &= ((currentRedColorValue == addressLEDs[i]->getRedColorValue()) && (currentGreenColorValue == addressLEDs[i]->getGreenColorValue()) && (currentBlueColorValue == addressLEDs[i]->getBlueColorValue()));
 			}
 
 			return colorsAreUpToDate;
