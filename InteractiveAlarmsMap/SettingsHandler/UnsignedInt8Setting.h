@@ -15,9 +15,9 @@ class UnsignedInt8Setting
 
     public:
 
-        UnsignedInt8Setting()
+        UnsignedInt8Setting(int addressIndex)
         {
-            addressIndex = 0;
+            this->addressIndex = addressIndex;
             updateValueFromMemory();
         }
 

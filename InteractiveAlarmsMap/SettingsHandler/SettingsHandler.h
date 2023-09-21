@@ -21,7 +21,7 @@ class SettingsHandler
 
             EEPROM.begin(numberOfUsedBytes);
 
-            modeSetting = new UnsignedInt8Setting();
+            modeSetting = new UnsignedInt8Setting(0);
         }
 
         void setMode(uint8_t newMode)
