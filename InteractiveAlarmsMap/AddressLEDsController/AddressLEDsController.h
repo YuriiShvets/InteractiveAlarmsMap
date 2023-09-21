@@ -12,6 +12,7 @@ class AddressLEDsController
 		uint16_t numberOfLEDs = 0;
 		Adafruit_NeoPixel* LEDsControl = NULL;
 		AddressLED** addressLEDs = NULL;
+		bool colorsAreUpToDate = false;
 
 
 	public:
@@ -29,11 +30,68 @@ class AddressLEDsController
 			}
 		}
 
+		// Updates each LED color to required value instantly.
 		void Update()
 		{
 			for (uint16_t i = 0; i < numberOfLEDs; i++)
 			{
 				LEDsControl->setPixelColor(i, addressLEDs[i]->getRedColorValue(), addressLEDs[i]->getGreenColorValue(), addressLEDs[i]->getBluColorValue());
+			}
+
+			LEDsControl->show();
+
+			colorsAreUpToDate = true;
+		}
+
+		// Updates each LED color to required value by one step at a time.
+		void smoothUpdate()
+		{
+			colorsAreUpToDate = true;
+
+			for (uint16_t i = 0; i < numberOfLEDs; i++)
+			{
+				uint8_t currentRedColorValue = LEDsControl->getPixelColor(i) >> 16;
+				uint8_t currentGreenColorValue = (LEDsControl->getPixelColor(i) << 16) >> 24;
+				uint8_t currentBluColorValue = (LEDsControl->getPixelColor(i) << 24) >> 24;
+
+				uint8_t newRedColorValue = currentRedColorValue;
+				uint8_t newGreenColorValue = currentGreenColorValue;
+				uint8_t newBluColorValue = currentBluColorValue;
+				
+				if (currentRedColorValue < addressLEDs[i]->getRedColorValue())
+				{
+					newRedColorValue++;
+					colorsAreUpToDate = false;
+				}
+				else if (currentRedColorValue > addressLEDs[i]->getRedColorValue())
+				{
+					newRedColorValue--;
+					colorsAreUpToDate = false;
+				}
+
+				if (currentGreenColorValue < addressLEDs[i]->getGreenColorValue())
+				{
+					newGreenColorValue++;
+					colorsAreUpToDate = false;
+				}
+				else if (currentGreenColorValue > addressLEDs[i]->getGreenColorValue())
+				{
+					newGreenColorValue--;
+					colorsAreUpToDate = false;
+				}
+
+				if (currentBluColorValue < addressLEDs[i]->getBluColorValue())
+				{
+					newBluColorValue++;
+					colorsAreUpToDate = false;
+				}
+				else if (currentBluColorValue > addressLEDs[i]->getBluColorValue())
+				{
+					newBluColorValue--;
+					colorsAreUpToDate = false;
+				}
+
+				LEDsControl->setPixelColor(i, newRedColorValue, newGreenColorValue, newBluColorValue);
 			}
 
 			LEDsControl->show();
@@ -47,6 +105,22 @@ class AddressLEDsController
 		AddressLED** getLEDs()
 		{
 			return addressLEDs;
+		}
+
+		bool AreAllColorsUpToDate()
+		{
+			colorsAreUpToDate = true;
+
+			for (uint16_t i = 0; i < numberOfLEDs; i++)
+			{
+				uint8_t currentRedColorValue = LEDsControl->getPixelColor(i) >> 16;
+				uint8_t currentGreenColorValue = (LEDsControl->getPixelColor(i) << 16) >> 24;
+				uint8_t currentBluColorValue = (LEDsControl->getPixelColor(i) << 24) >> 24;
+
+				colorsAreUpToDate &= ((currentRedColorValue == addressLEDs[i]->getRedColorValue()) && (currentGreenColorValue == addressLEDs[i]->getGreenColorValue()) && (currentBluColorValue == addressLEDs[i]->getBluColorValue()));
+			}
+
+			return colorsAreUpToDate;
 		}
 
 		~AddressLEDsController()
