@@ -20,7 +20,7 @@ class SerialCommandsHandler
         {
             this->settings = settings;
 
-            Serial.println("Handler of serial commands was initialized. Use help command to view all commands");
+            Serial.println("Handler of serial commands was initialized. Use help command to view all commands.");
         }
 
         void Update()
@@ -36,14 +36,15 @@ class SerialCommandsHandler
 
                 if (command.getName() == "help")
                 {
-                    Serial.println("  help - shows list of all commands");
-                    Serial.println("  setMode <mode> (mode: 0 - standart mode; 1 - interactive alarms mode)");
-                    Serial.println("  getMode - shows current work mode");
+                    Serial.println("  help - shows list of all commands.");
+                    Serial.println("  setMode <mode> (mode: 0 - standart mode; 1 - interactive alarms mode).");
+                    Serial.println("  getMode - shows current work mode.");
                 }
                 else if (command.getName() == "getmode")
                 {
                     Serial.print("  Mode: ");
-                    Serial.println(settings->getMode());
+                    Serial.print(settings->getMode());
+                    Serial.println(".");
                 }
                 else if (command.getName() == "setmode")
                 {
@@ -51,7 +52,8 @@ class SerialCommandsHandler
                     {
                         settings->setMode(command.getArgument().charAt(0) - 48);
                         Serial.print("  New mode: ");
-                        Serial.println(settings->getMode());
+                        Serial.print(settings->getMode());
+                        Serial.println(".");
                     }
                     else
                     {
@@ -60,7 +62,7 @@ class SerialCommandsHandler
                 }
                 else
                 {
-                    Serial.println("  Unknown command");
+                    Serial.println("  Unknown command.");
                 }
             }
         }
