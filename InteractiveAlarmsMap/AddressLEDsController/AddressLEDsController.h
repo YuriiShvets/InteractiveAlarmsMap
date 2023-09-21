@@ -34,7 +34,6 @@ class AddressLEDsController
 			for (uint16_t i = 0; i < numberOfLEDs; i++)
 			{
 				LEDsControl->setPixelColor(i, addressLEDs[i]->getRedColorValue(), addressLEDs[i]->getGreenColorValue(), addressLEDs[i]->getBluColorValue());
-				addressLEDs[i] = new AddressLED();
 			}
 
 			LEDsControl->show();
