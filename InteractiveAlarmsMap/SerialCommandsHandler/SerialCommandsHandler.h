@@ -13,7 +13,7 @@ using namespace std;
 class SerialCommandsHandler
 {
     private:
-        SettingsHandler* settings;
+        SettingsHandler* settings = NULL;
 
     public:
         SerialCommandsHandler(SettingsHandler* settings)

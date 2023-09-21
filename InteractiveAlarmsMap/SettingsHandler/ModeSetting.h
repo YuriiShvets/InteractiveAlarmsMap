@@ -10,8 +10,8 @@ class ModeSetting
 {
     private:
         
-        int addressIndex;
-        uint8_t value;
+        int addressIndex = 0;
+        uint8_t value = 0;
 
     public:
 

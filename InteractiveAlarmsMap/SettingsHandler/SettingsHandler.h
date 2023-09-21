@@ -11,7 +11,7 @@ class SettingsHandler
 {
 
     private:
-        ModeSetting* modeSetting;
+        ModeSetting* modeSetting = NULL;
 
     public:
 
@@ -22,8 +22,6 @@ class SettingsHandler
             EEPROM.begin(numberOfUsedBytes);
 
             modeSetting = new ModeSetting();
-
-            Serial.println("Handler of settings was initialized.");
         }
 
         void setMode(uint8_t newMode)
