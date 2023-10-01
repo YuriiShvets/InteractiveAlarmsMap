@@ -4,6 +4,7 @@
 
 #include "SerialCommand.h"
 #include "../SettingsHandler/SettingsHandler.h"
+#include "../Libraries/Streaming/Streaming.h"
 
 #include <stdexcept>
 
@@ -22,7 +23,7 @@ class SerialCommandsHandler
         {
             this->settings = settings;
 
-            Serial.println("Handler of serial commands was initialized. Use help command to view all commands.");
+            Serial << "Handler of serial commands was initialized. Use help command to view all commands." << endl;
         }
 
         void Update()
@@ -33,8 +34,6 @@ class SerialCommandsHandler
 
                 Serial.print(" -> ");
                 Serial.println(str);
-            
-                //  TODO suround with try-catch.
 
                 try
                 {
@@ -42,41 +41,37 @@ class SerialCommandsHandler
 
                     if (command.getName() == "help")
                     {
-                        Serial.println("help - shows list of all commands.");
-                        Serial.println("setMode <mode> (mode: 0 - standart mode; 1 - interactive alarms mode) - command for mode setting.");
-                        Serial.println("getMode - shows current work mode.");
-                        Serial.println("setWiFiNetworkName <WiFiNetworkName> - command for setting of Wi-Fi network name.");
-                        Serial.println("  Wi-Fi network can be any alphanumeric, case-sensitive entry from 2 to 32 characters. The printable characters plus the space are allowed, but these six characters are not:");
-                        Serial.println("  ? , \", $, [, \\, ], and +.");
-                        Serial.println("  In addition, these three characters cannot be the first character:");
-                        Serial.println("  !, #, and ;.");
-                        Serial.println("getWiFiNetworkName - shows name of the Wi-Fi network.");
+                        Serial << "help - shows list of all commands." << endl;
+                        
+                        Serial << "setMode <mode> (mode: 0 - standart mode; 1 - interactive alarms mode) - command for mode setting." << endl;
+                        
+                        Serial << "getMode - shows current work mode." << endl;
+                        
+                        Serial << "setWiFiNetworkName <WiFiNetworkName> - command for setting of Wi-Fi network name." << endl;
+                        Serial << "  Wi-Fi network can be any alphanumeric, case-sensitive entry from " << settings->minWiFiNetworkNameLength
+                            << " to " << settings->maxWiFiNetworkNameLength << " characters." << endl;
+                        Serial << "  Not allowed characters: " << settings->getWiFiNetworkNameForbiddenCharacters().c_str() << "." << endl;
+                        Serial << "  In addition, these characters cannot be the first character: " << settings->getWiFiNetworkNameForbiddenStartCharacters().c_str() << "." << endl;
+                        
+                        Serial << "getWiFiNetworkName - shows name of the Wi-Fi network." << endl;
                     }
                     else if (command.getName() == "setmode")
                     {
                         settings->setMode(command.getArgument().charAt(0) - 48);
-                        Serial.print("New mode: ");
-                        Serial.print(settings->getMode());
-                        Serial.println(".");
+                        Serial << "New mode: " << settings->getMode() << "." << endl;
                     }
                     else if (command.getName() == "getmode")
                     {
-                        Serial.print("Mode: ");
-                        Serial.print(settings->getMode());
-                        Serial.println(".");
+                        Serial << "Mode: " << settings->getMode() << "." << endl;
                     }
                     else if (command.getName() == "setwifinetworkname")
                     {
                         settings->setWiFiNetworkName(command.getArgument());
-                        Serial.print("New Wi-Fi network name: ");
-                        Serial.print(settings->getWiFiNetworkName());
-                        Serial.println(".");
+                        Serial << "New Wi-Fi network name: " << settings->getWiFiNetworkName() << "." << endl;
                     }
                     else if (command.getName() == "getwifinetworkname")
                     {
-                        Serial.print("Wi-Fi network name: ");
-                        Serial.print(settings->getWiFiNetworkName());
-                        Serial.println(".");
+                        Serial << "Wi-Fi network name: " << settings->getWiFiNetworkName() << "." <<endl;
                     }
                     else
                     {
@@ -85,8 +80,7 @@ class SerialCommandsHandler
                 }
                 catch (runtime_error& e)
                 {
-                    Serial.print("[Error] ");
-                    Serial.println(e.what());
+                    Serial << "[Error] " << e.what() << endl;
                 }
             }
         }

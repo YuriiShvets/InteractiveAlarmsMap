@@ -2,6 +2,8 @@
 #define UnsignedInt8Setting_h
 #pragma once
 
+#include "../Libraries/Streaming/Streaming.h"
+
 #include <EEPROM.h>
 
 //	EEPROM must be initialized externaly.
@@ -26,7 +28,7 @@ class UnsignedInt8Setting
         {
             EEPROM.put(addressIndex, newValue);
 
-            Serial.println("  [Information] Saving unsigned int 8 setting to memory.");
+            Serial << "[Information] Saving unsigned int 8 setting to memory." << endl;
 
             EEPROM.commit();
             updateFromMemory();

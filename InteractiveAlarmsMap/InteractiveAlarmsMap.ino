@@ -1,14 +1,13 @@
 //  -fexceptions flag should be added to compiler.cpp.extra_flags in platform.txt (for enabling of exeptions handling).
 //  C++ Exceptions option in Tools panel of Arduino IDE must be enabled.
 
-//  TODO read about bad string.
-//  TODO rewrite all serial prints with <<.
 //  TODO write logger?
 
 #include "SerialCommandsHandler/SerialCommandsHandler.h"
 #include "SettingsHandler/SettingsHandler.h"
 #include "AddressLEDsController/AddressLEDsController.h"
 #include "Animations/SimpleYellowAndBlueAnimation.h"
+#include "Libraries/Streaming/Streaming.h"
 
 void setup() 
 {
@@ -18,7 +17,7 @@ void setup()
   delay(1000);
 
   Serial.begin(115200);
-  Serial.println();
+  Serial << endl;
 
   SettingsHandler settings = SettingsHandler();
   

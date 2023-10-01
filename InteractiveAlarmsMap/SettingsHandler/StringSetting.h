@@ -2,6 +2,8 @@
 #define StringSetting_h
 #pragma once
 
+#include "../Libraries/Streaming/Streaming.h"
+
 #include <EEPROM.h>
 #include <stdexcept>
 
@@ -44,7 +46,7 @@ class StringSetting
 				EEPROM.put(addressIndex + 2 + i, newValue.charAt(i));
 			}
 
-			Serial.println("[Information] Saving String setting to memory.");
+			Serial << "[Information] Saving String setting to memory." << endl;
 
 			EEPROM.commit();
 			updateFromMemory();
@@ -69,7 +71,7 @@ class StringSetting
 			if (usedSize > maxSize)
 			{
 				usedSize = maxSize;
-				Serial.println("[Warning] Settings used space are bigger than maximum size of the setting.");
+				Serial << "[Warning] Settings used space are bigger than maximum size of the setting." << endl;
 			}
 
 			// Reading of a value.
