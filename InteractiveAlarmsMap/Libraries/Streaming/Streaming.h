@@ -45,8 +45,8 @@ struct _BASED
 
 struct _BYTE_CODE
 {
-	byte val;
-	_BYTE_CODE(byte v) : val(v)
+	int8_t val;
+	_BYTE_CODE(int8_t v) : val(v)
 	{}
 };
 #define _BYTE(a)    _BYTE_CODE(a)
