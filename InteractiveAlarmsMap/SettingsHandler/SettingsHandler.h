@@ -13,12 +13,10 @@ class SettingsHandler
 
     private:
 
-        const uint8_t maxWiFiNetworkNameLength = 32;
-        const uint8_t minWiFiNetworkNameLength = 2;
-        //  TODO complete data formalization.
-
         UnsignedInt8Setting* modeSetting = NULL;
         StringSetting* WiFiNettworkName = NULL;
+        const string WiFiNetworkNameForbiddenCharacters = "?\"$[\\]+";
+        const string WiFiNetworkNameForbiddenStartCharacters = "!#;";
         
 
     public:
@@ -33,6 +31,8 @@ class SettingsHandler
 
             WiFiNettworkName = new StringSetting(1, maxWiFiNetworkNameLength);    //  34 bytes.
         }
+
+        //  -------------------- Mode settings --------------------
 
         void setMode(uint8_t newMode)
         {
@@ -49,6 +49,21 @@ class SettingsHandler
             return modeSetting->getValue();
         }
 
+        //  -------------------- Wi-Fi settings --------------------
+
+        const uint8_t minWiFiNetworkNameLength = 2;
+        const uint8_t maxWiFiNetworkNameLength = 32;
+
+        string getWiFiNetworkNameForbiddenCharacters()
+        {
+            return WiFiNetworkNameForbiddenCharacters;
+        }
+
+        string getWiFiNetworkNameForbiddenStartCharacters()
+        {
+            return WiFiNetworkNameForbiddenStartCharacters;
+        }
+
         void setWiFiNetworkName(String newWiFiNetworkName)
         {
             if (newWiFiNetworkName.length() < minWiFiNetworkNameLength)
@@ -60,22 +75,19 @@ class SettingsHandler
                 throw runtime_error(string("The Wi-Fi network name cannot contain more than ") + to_string(maxWiFiNetworkNameLength) + " characters.");
             }
 
-            string forbiddenCharacters = "?\"$[\\]+";
-
-            for (char forbiddenCharacter : forbiddenCharacters)
+            for (char forbiddenCharacter : WiFiNetworkNameForbiddenCharacters)
             {
                 if (newWiFiNetworkName.indexOf(forbiddenCharacter) != -1)
                 {
-                    throw runtime_error("?\"$[\\]+ characters are forbidden for use in Wi-Fi network name.");
+                    throw runtime_error(WiFiNetworkNameForbiddenCharacters + " characters are forbidden for use in Wi-Fi network name.");
                 }
             }
 
-            String forbiddenStartCharacters = "!#;";
-            for (char forbiddenStartCharacter : forbiddenStartCharacters)
+            for (char forbiddenStartCharacter : WiFiNetworkNameForbiddenStartCharacters)
             {
                 if (newWiFiNetworkName.indexOf(forbiddenStartCharacter) == 0)
                 {
-                    throw runtime_error("!#; characters are forbidden for use at start of the Wi-Fi network name.");
+                    throw runtime_error(WiFiNetworkNameForbiddenStartCharacters + " characters are forbidden for use at start of the Wi-Fi network name.");
                 }
             }
 
