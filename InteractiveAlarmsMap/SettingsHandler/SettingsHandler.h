@@ -14,7 +14,10 @@ class SettingsHandler
     private:
 
         UnsignedInt8Setting* modeSetting = NULL;
+
         StringSetting* WiFiNettworkName = NULL;
+        StringSetting* WiFiNettworkPassword = NULL;
+
         const string WiFiNetworkNameForbiddenCharacters = "?\"$[\\]+";
         const string WiFiNetworkNameForbiddenStartCharacters = "!#;";
         
@@ -23,13 +26,16 @@ class SettingsHandler
 
         SettingsHandler()
         {
-            int numberOfUsedBytes = 35;
+            modeSetting = new UnsignedInt8Setting(0);
+            WiFiNettworkName = new StringSetting(modeSetting->getAddress() + modeSetting->getSize(), maxWiFiNetworkNameLength);
+            WiFiNettworkPassword = new StringSetting(WiFiNettworkName->getAddress() + WiFiNettworkName->getMaxSize(), maxWiFiNetworkPasswordLength);
 
-            EEPROM.begin(numberOfUsedBytes);
+            EEPROM.begin(modeSetting->getSize() + WiFiNettworkName->getMaxSize() + WiFiNettworkPassword->getMaxSize());
 
-            modeSetting = new UnsignedInt8Setting(0);   //  1 byte.
+            modeSetting->updateFromMemory();
+            WiFiNettworkName->updateFromMemory();
+            WiFiNettworkPassword->updateFromMemory();
 
-            WiFiNettworkName = new StringSetting(1, maxWiFiNetworkNameLength);    //  34 bytes.
         }
 
         //  -------------------- Mode settings --------------------
@@ -49,7 +55,7 @@ class SettingsHandler
             return modeSetting->getValue();
         }
 
-        //  -------------------- Wi-Fi settings --------------------
+        //  -------------------- Wi-Fi network name settings --------------------
 
         const uint8_t minWiFiNetworkNameLength = 2;
         const uint8_t maxWiFiNetworkNameLength = 32;
@@ -98,6 +104,32 @@ class SettingsHandler
         {
             return WiFiNettworkName->getValue();
         }
+
+        //  -------------------- Wi-Fi network password settings --------------------
+
+        const uint8_t minWiFiNetworkPasswordLength = 8;
+        const uint8_t maxWiFiNetworkPasswordLength = 63;
+
+        void setWiFiNetworkPassword(String newWiFiNetworkPassword)
+        {
+            if (newWiFiNetworkPassword.length() < minWiFiNetworkPasswordLength)
+            {
+                throw runtime_error(string("The Wi-Fi network password cannot contain less than ") + to_string(minWiFiNetworkPasswordLength) + " characters.");
+            }
+            if (newWiFiNetworkPassword.length() > maxWiFiNetworkPasswordLength)
+            {
+                throw runtime_error(string("The Wi-Fi network password cannot contain more than ") + to_string(maxWiFiNetworkPasswordLength) + " characters.");
+            }
+
+            WiFiNettworkPassword->setValue(newWiFiNetworkPassword);
+        }
+
+        String getWiFiNetworkPassword()
+        {
+            return WiFiNettworkPassword->getValue();
+        }
+
+        // -------------------------------------------------------------------------
 
         ~SettingsHandler()
         {

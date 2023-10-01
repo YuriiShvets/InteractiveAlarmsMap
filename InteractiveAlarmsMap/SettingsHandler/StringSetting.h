@@ -17,7 +17,7 @@ class StringSetting
 		uint16_t addressIndex = 0;
 		uint16_t maxSize = 0;
 		uint16_t usedSize = 0;	//	Stored in first 2 bytes.
-		String value = "";	//	Stored after 2 first bytes. Can not be longer that maxSize.
+		String value = "";		//	Stored after 2 first bytes. Can not be longer that maxSize.
 
 	public:
 
@@ -25,8 +25,6 @@ class StringSetting
 		{
 			this->addressIndex = addressIndex;
 			this->maxSize = maxSize;
-
-			updateFromMemory();
 		}
 
 		void setValue(String newValue)
@@ -57,7 +55,15 @@ class StringSetting
 			return value;
 		}
 
-	private:
+		uint16_t getAddress()
+		{
+			return addressIndex;
+		}
+
+		uint16_t getMaxSize()
+		{
+			return maxSize + 2;
+		}
 
 		void updateFromMemory()
 		{

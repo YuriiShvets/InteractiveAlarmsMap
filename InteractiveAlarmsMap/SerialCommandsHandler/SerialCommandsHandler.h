@@ -48,12 +48,18 @@ class SerialCommandsHandler
                         Serial << "getMode - shows current work mode." << endl;
                         
                         Serial << "setWiFiNetworkName <WiFiNetworkName> - command for setting of Wi-Fi network name." << endl;
-                        Serial << "  Wi-Fi network can be any alphanumeric, case-sensitive entry from " << settings->minWiFiNetworkNameLength
+                        Serial << "  Wi-Fi network name can be any alphanumeric, case-sensitive entry from " << settings->minWiFiNetworkNameLength
                             << " to " << settings->maxWiFiNetworkNameLength << " characters." << endl;
                         Serial << "  Not allowed characters: " << settings->getWiFiNetworkNameForbiddenCharacters().c_str() << "." << endl;
                         Serial << "  In addition, these characters cannot be the first character: " << settings->getWiFiNetworkNameForbiddenStartCharacters().c_str() << "." << endl;
                         
                         Serial << "getWiFiNetworkName - shows name of the Wi-Fi network." << endl;
+
+                        Serial << "setWiFiNetworkPassword <WiFiNetworkPassword> - command for setting of Wi-Fi network password." << endl;
+                        Serial << "  Wi-Fi network password can be any alphanumeric, case-sensitive entry from " << settings->minWiFiNetworkPasswordLength
+                            << " to " << settings->maxWiFiNetworkPasswordLength << " characters." << endl;
+
+                        Serial << "getWiFiNetworkPassword - shows password of the Wi-Fi network." << endl;
                     }
                     else if (command.getName() == "setmode")
                     {
@@ -72,6 +78,15 @@ class SerialCommandsHandler
                     else if (command.getName() == "getwifinetworkname")
                     {
                         Serial << "Wi-Fi network name: " << settings->getWiFiNetworkName() << "." <<endl;
+                    }
+                    else if (command.getName() == "setwifinetworkpassword")
+                    {
+                        settings->setWiFiNetworkPassword(command.getArgument());
+                        Serial << "New Wi-Fi network password: " << settings->getWiFiNetworkPassword() << "." << endl;
+                    }
+                    else if (command.getName() == "getwifinetworkpassword")
+                    {
+                        Serial << "Wi-Fi network password: " << settings->getWiFiNetworkPassword() << "." << endl;
                     }
                     else
                     {

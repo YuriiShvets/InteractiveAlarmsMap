@@ -21,7 +21,6 @@ class UnsignedInt8Setting
         UnsignedInt8Setting(uint16_t addressIndex)
         {
             this->addressIndex = addressIndex;
-            updateFromMemory();
         }
 
         void setValue(uint8_t newValue)
@@ -39,7 +38,15 @@ class UnsignedInt8Setting
             return value;
         }
 
-    private:
+        uint16_t getAddress()
+        {
+            return addressIndex;
+        }
+
+        uint8_t getSize()
+        {
+            return 1;
+        }
 
         void updateFromMemory()
         {
