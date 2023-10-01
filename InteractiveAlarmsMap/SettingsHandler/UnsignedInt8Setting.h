@@ -5,27 +5,31 @@
 #include <EEPROM.h>
 
 //	EEPROM must be initialized externaly.
+//  Serial should be initialized externaly.
 
 class UnsignedInt8Setting
 {
     private:
         
-        int addressIndex = 0;
+        uint16_t addressIndex = 0;
         uint8_t value = 0;
 
     public:
 
-        UnsignedInt8Setting(int addressIndex)
+        UnsignedInt8Setting(uint16_t addressIndex)
         {
             this->addressIndex = addressIndex;
-            updateValueFromMemory();
+            updateFromMemory();
         }
 
         void setValue(uint8_t newValue)
         {
             EEPROM.put(addressIndex, newValue);
+
+            Serial.println("  [Information] Saving unsigned int 8 setting to memory.");
+
             EEPROM.commit();
-            updateValueFromMemory();
+            updateFromMemory();
         }
 
         uint8_t getValue()
@@ -35,7 +39,7 @@ class UnsignedInt8Setting
 
     private:
 
-        void updateValueFromMemory()
+        void updateFromMemory()
         {
             EEPROM.get(addressIndex, value);
         }

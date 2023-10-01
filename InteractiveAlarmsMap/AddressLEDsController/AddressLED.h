@@ -14,9 +14,9 @@ class AddressLED
 
 	public:
 
-		void setRedColorValue(uint8_t newRedColorValue)
+		void setRedColorValue(uint8_t redColorValue)
 		{
-			redColorValue = newRedColorValue;
+			this->redColorValue = redColorValue;
 		}
 
 		uint8_t getRedColorValue()
@@ -25,9 +25,9 @@ class AddressLED
 		}
 
 
-		void setGreenColorValue(uint8_t newGreenColorValue)
+		void setGreenColorValue(uint8_t greenColorValue)
 		{
-			greenColorValue = newGreenColorValue;
+			this->greenColorValue = greenColorValue;
 		}
 
 		uint8_t getGreenColorValue()
@@ -36,9 +36,9 @@ class AddressLED
 		}
 
 
-		void setBlueColorValue(uint8_t newBlueColorValue)
+		void setBlueColorValue(uint8_t blueColorValue)
 		{
-			blueColorValue = newBlueColorValue;
+			this->blueColorValue = blueColorValue;
 		}
 
 		uint8_t getBlueColorValue()

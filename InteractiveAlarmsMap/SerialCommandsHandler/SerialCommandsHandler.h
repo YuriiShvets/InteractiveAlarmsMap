@@ -5,6 +5,8 @@
 #include "SerialCommand.h"
 #include "../SettingsHandler/SettingsHandler.h"
 
+#include <stdexcept>
+
 using namespace std;
 
 //	Handler of serial commands.
@@ -29,40 +31,62 @@ class SerialCommandsHandler
             {
                 String str = Serial.readString();
 
-                Serial.print("->");
+                Serial.print(" -> ");
                 Serial.println(str);
             
-                SerialCommand command = parceCommand(str);
+                //  TODO suround with try-catch.
 
-                if (command.getName() == "help")
+                try
                 {
-                    Serial.println("  help - shows list of all commands.");
-                    Serial.println("  setMode <mode> (mode: 0 - standart mode; 1 - interactive alarms mode).");
-                    Serial.println("  getMode - shows current work mode.");
-                }
-                else if (command.getName() == "getmode")
-                {
-                    Serial.print("  Mode: ");
-                    Serial.print(settings->getMode());
-                    Serial.println(".");
-                }
-                else if (command.getName() == "setmode")
-                {
-                    if (command.getArgument() == "0" || command.getArgument() == "1")
+                    SerialCommand command = parceCommand(str);
+
+                    if (command.getName() == "help")
+                    {
+                        Serial.println("help - shows list of all commands.");
+                        Serial.println("setMode <mode> (mode: 0 - standart mode; 1 - interactive alarms mode) - command for mode setting.");
+                        Serial.println("getMode - shows current work mode.");
+                        Serial.println("setWiFiNetworkName <WiFiNetworkName> - command for setting of Wi-Fi network name.");
+                        Serial.println("  Wi-Fi network can be any alphanumeric, case-sensitive entry from 2 to 32 characters. The printable characters plus the space are allowed, but these six characters are not:");
+                        Serial.println("  ? , \", $, [, \\, ], and +.");
+                        Serial.println("  In addition, these three characters cannot be the first character:");
+                        Serial.println("  !, #, and ;.");
+                        Serial.println("getWiFiNetworkName - shows name of the Wi-Fi network.");
+                    }
+                    else if (command.getName() == "setmode")
                     {
                         settings->setMode(command.getArgument().charAt(0) - 48);
-                        Serial.print("  New mode: ");
+                        Serial.print("New mode: ");
                         Serial.print(settings->getMode());
+                        Serial.println(".");
+                    }
+                    else if (command.getName() == "getmode")
+                    {
+                        Serial.print("Mode: ");
+                        Serial.print(settings->getMode());
+                        Serial.println(".");
+                    }
+                    else if (command.getName() == "setwifinetworkname")
+                    {
+                        settings->setWiFiNetworkName(command.getArgument());
+                        Serial.print("New Wi-Fi network name: ");
+                        Serial.print(settings->getWiFiNetworkName());
+                        Serial.println(".");
+                    }
+                    else if (command.getName() == "getwifinetworkname")
+                    {
+                        Serial.print("Wi-Fi network name: ");
+                        Serial.print(settings->getWiFiNetworkName());
                         Serial.println(".");
                     }
                     else
                     {
-                        Serial.println("  Invalid argument, please use help command for more info.");
+                        throw runtime_error("Unknown command. Use help command to get list of all commands.");
                     }
                 }
-                else
+                catch (runtime_error& e)
                 {
-                    Serial.println("  Unknown command.");
+                    Serial.print("[Error] ");
+                    Serial.println(e.what());
                 }
             }
         }
@@ -91,11 +115,7 @@ class SerialCommandsHandler
                 commandName = str;
             }
 
-            //  Convertin commandName to lower case.
-            transform(commandName.begin(), commandName.end(), commandName.begin(), [](unsigned char c)
-            {
-                return tolower(c);
-            });
+            commandName.toLowerCase();
       
             return SerialCommand(commandName, commandArgument);
         }
