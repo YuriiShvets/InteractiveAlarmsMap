@@ -4,9 +4,12 @@
 
 #include "UnsignedInt8Setting.h"
 #include "StringSetting.h"
+#include "../Libraries/Streaming/Streaming.h"
 
 #include <EEPROM.h>
 #include <stdexcept>
+
+//	Serial must be initialized externaly.
 
 class SettingsHandler
 {
@@ -30,7 +33,9 @@ class SettingsHandler
             WiFiNettworkName = new StringSetting(modeSetting->getAddress() + modeSetting->getSize(), maxWiFiNetworkNameLength);
             WiFiNettworkPassword = new StringSetting(WiFiNettworkName->getAddress() + WiFiNettworkName->getMaxSize(), maxWiFiNetworkPasswordLength);
 
-            EEPROM.begin(modeSetting->getSize() + WiFiNettworkName->getMaxSize() + WiFiNettworkPassword->getMaxSize());
+            uint16_t usedMemory = modeSetting->getSize() + WiFiNettworkName->getMaxSize() + WiFiNettworkPassword->getMaxSize();
+            Serial << "[Information] used EEPROM memory: " << usedMemory << " bytes." << endl;
+            EEPROM.begin(usedMemory);
 
             modeSetting->updateFromMemory();
             WiFiNettworkName->updateFromMemory();
